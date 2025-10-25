@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>রেজিস্ট্রেশন - রক্ত দান বন্ধু ফাউন্ডেশন</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966327.png" alt="logo">
+    <h1>রক্ত দান বন্ধু ফাউন্ডেশন</h1>
+  </div>
+</header>
+
+<nav>
+  <a href="index.html">হোম</a>
+  <a href="register.html" class="active">রেজিস্ট্রেশন</a>
+  <a href="donorlist.html">ডোনার লিস্ট</a>
+  <a href="donate.html">রক্ত দিন</a>
+  <a href="contact.html">যোগাযোগ</a>
+</nav>
+
+<section class="section">
+  <h2>🩸 রক্তদাতা রেজিস্ট্রেশন ফর্ম</h2>
+  <form id="donorForm">
+    <label>নাম:</label>
+    <input type="text" name="name" required>
+    <label>রক্তের গ্রুপ:</label>
+    <select name="blood" required>
+      <option value="">-- নির্বাচন করুন --</option>
+      <option>A+</option><option>A-</option><option>B+</option>
+      <option>B-</option><option>O+</option><option>O-</option>
+      <option>AB+</option><option>AB-</option>
+    </select>
+    <label>ছবি URL:</label>
+    <input type="text" name="photo" placeholder="https://...">
+    <button type="submit" class="btn">রেজিস্টার করুন</button>
+  </form>
+</section>
+
+<footer>© 2025 রক্ত দান বন্ধু ফাউন্ডেশন</footer>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZcFwXtuj6EIem_nOoTn7DcWqt-XKDSQ1xog9f6O05IGUCgKwoBgsHHLGJvvMnybk/exec";
+
+document.getElementById("donorForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const params = new URLSearchParams(formData);
+  await fetch(SCRIPT_URL, { method:"POST", body:params });
+  alert("রেজিস্ট্রেশন সম্পন্ন হয়েছে!");
+  e.target.reset();
+});
+</script>
+
+</body>
+</html>
