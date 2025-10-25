@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<title>ডোনার খুঁজুন</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div style="max-width:800px;margin:auto;">
+<h2>🩸 ডোনার খুঁজুন</h2>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:15px;">
+<select id="filterBlood" onchange="filterData()">
+  <option value="">সব রক্তের গ্রুপ</option>
+  <option>A+</option><option>A-</option>
+  <option>B+</option><option>B-</option>
+  <option>O+</option><option>O-</option>
+  <option>AB+</option><option>AB-</option>
+</select>
+<input id="searchBox" onkeyup="filterData()" placeholder="নাম বা ঠিকানা দিয়ে খুঁজুন..." style="width:200px;">
+</div>
+
+<div id="donorList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;"></div>
+</div>
+
+<script>
+const API_URL="YOUR_APPS_SCRIPT_URL";
+let donors=[];
+
+async function fetchDonors(){
+  const res=await fetch(API_URL);
+  donors=await res.json();
+  showDonors(donors);
+}
+
+function showDonors(list){
+  const container=document.getElementById("donorList");
+  container.innerHTML="";
+  if(list.length===0){
+    container.innerHTML="<p style='text-align:center;'>কোন তথ্য পাওয়া যায়নি 😢</p>";
+    return;
+  }
+  list.forEach(d=>{
+    if(d.Verified!=="✅ Verified") return;
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <img src="${d.ProfilePic || 'default.png'}" style="width:100%;height:150px;object-fit:cover;border-radius:5px;">
+      <h3 style="margin:5px 0;color:#d32f2f;">${d.Name}</h3>
+      <p><b>রক্তের গ্রুপ:</b> ${d.Blood}</p>
+      <p><b>মোবাইল:</b> ${d.Phone}</p>
+      <p><b>ঠিকানা:</b> ${d.Address}</p>
+      <p><b>সর্বশেষ রক্তদান:</b> ${d["Last Donation"] || "উল্লেখ নেই"}</p>
+      <p><b>মোট রক্তদান:</b> ${d["Donation Count"] || 0}</p>
+      <p><b>স্ট্যাটাস:</b> ${d.Status || "Available"}</p>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function filterData(){
+  const blood=document.getElementById("filterBlood").value;
+  const search=document.getElementById("searchBox").value.toLowerCase();
+  const filtered=donors.filter(d=>{
+    const matchBlood=!blood || d.Blood===blood;
+    const matchSearch=!search || (d.Name+d.Address).toLowerCase().includes(search);
+    return matchBlood && matchSearch && d.Verified==="✅ Verified";
+  });
+  showDonors(filtered);
+}
+
+fetchDonors();
+</script>
+</body>
+</html>

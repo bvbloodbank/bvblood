@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<title>🩸 ডোনার রেজিস্ট্রেশন</title>
+<style>
+body{font-family:kalpurush,sans-serif;background:#fefefe;margin:0;padding:20px;text-align:center;}
+input,select,button{width:90%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:8px;}
+button{background:#c62828;color:#fff;font-size:16px;cursor:pointer;border:none;}
+button:hover{background:#b71c1c;}
+.formBox{max-width:400px;margin:auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+#msg{font-weight:bold;margin-top:10px;}
+</style>
+</head>
+<body>
+
+<h2>🩸 নতুন ডোনার রেজিস্ট্রেশন</h2>
+<div class="formBox">
+  <input id="name" placeholder="নাম লিখুন"><br>
+  <select id="blood">
+    <option value="">রক্তের গ্রুপ</option>
+    <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+    <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+  </select><br>
+  <input id="phone" placeholder="মোবাইল নম্বর"><br>
+  <input id="address" placeholder="ঠিকানা"><br>
+  <input id="lastDonate" type="date"><br>
+  <input id="photo" type="file" accept="image/*"><br>
+  <button onclick="submitForm()">✅ জমা দিন</button>
+  <p id="msg"></p>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxASOpyvgfgXgOzpqkhsKJe1Ybh1_BRA31LO3030StDIItfnbEFv_ZaXM5DvG82DSY/exec"; // এখানে তোমার Apps Script URL বসাও
+
+async function submitForm(){
+  const name = document.getElementById("name").value.trim();
+  const blood = document.getElementById("blood").value;
+  const phone = document.getElementById("phone").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const lastDonate = document.getElementById("lastDonate").value;
+  const photoFile = document.getElementById("photo").files[0];
+
+  if(!name || !blood || !phone){ alert("সব তথ্য পূরণ করুন"); return; }
+
+  let base64Photo = "";
+  if(photoFile) base64Photo = await fileToBase64(photoFile);
+
+  document.getElementById("msg").innerText = "⏳ তথ্য পাঠানো হচ্ছে...";
+
+  try{
+    const res = await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        name,blood,phone,address,lastDonate,photoURL:base64Photo
+      })
+    });
+    const data = await res.json();
+    if(data.status==="success"){
+      document.getElementById("msg").innerText = "✅ সফলভাবে সংরক্ষণ হয়েছে!";
+      document.querySelector(".formBox").reset;
+    }else{
+      document.getElementById("msg").innerText = "⚠️ ত্রুটি: "+data.message;
+    }
+  }catch(err){
+    document.getElementById("msg").innerText = "⚠️ নেটওয়ার্ক ত্রুটি!";
+  }
+}
+
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=e=>reject(e);
+    reader.readAsDataURL(file);
+  });
+}
+</script>
+</body>
+</html>

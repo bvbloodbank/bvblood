@@ -1,0 +1,123 @@
+body {
+  margin: 0;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  background: #fff5f5;
+  color: #222;
+  text-align: center;
+}
+
+/* 🔹 Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #d32f2f;
+  color: white;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+}
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin: 6px 10px;
+  font-weight: bold;
+}
+.nav-links a.active {
+  text-decoration: underline;
+}
+.nav-links a:hover {
+  opacity: 0.8;
+}
+
+/* 🔹 Hero Section */
+.hero {
+  background: linear-gradient(to right, #ff5252, #d32f2f);
+  color: white;
+  padding: 60px 20px;
+}
+.hero h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+.hero p {
+  font-size: 18px;
+}
+.btn {
+  background: white;
+  color: #d32f2f;
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: bold;
+  margin-top: 15px;
+}
+.btn:hover {
+  background: #fff0f0;
+}
+
+/* 🔹 Donor Cards */
+.donorGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+}
+.donorCard {
+  background: white;
+  border-radius: 15px;
+  width: 160px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 15px;
+  transition: 0.3s;
+}
+.donorCard:hover {
+  transform: translateY(-5px);
+}
+.photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(211,47,47, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(211,47,47, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(211,47,47, 0); }
+}
+
+/* 🔹 Animation */
+.fadeIn {
+  animation: fade 0.8s ease-in-out;
+}
+@keyframes fade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🔹 Footer */
+footer {
+  background: #b71c1c;
+  color: white;
+  padding: 10px;
+  font-size: 14px;
+}
+
+/* 🔹 Responsive */
+@media (max-width: 600px){
+  .donorCard {
+    width: 45%;
+  }
+  .hero h1 {
+    font-size: 24px;
+  }
+  .hero p {
+    font-size: 16px;
+  }
+}

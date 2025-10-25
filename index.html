@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeSave Blood Bank</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Noto Sans Bengali',sans-serif;}
+body{background:#fffaf9;color:#333;overflow-x:hidden;}
+header{
+  background:linear-gradient(135deg,#d32f2f,#ff5252);
+  color:white;
+  padding:20px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+header h1{font-size:22px;margin-left:10px;}
+header img{width:40px;height:40px;border-radius:50%;margin-right:10px;}
+nav{
+  background:#fff;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  box-shadow:0 1px 4px rgba(0,0,0,0.1);
+}
+nav a{
+  padding:12px 18px;
+  text-decoration:none;
+  color:#c4001d;
+  font-weight:600;
+  transition:0.3s;
+}
+nav a:hover, nav a.active{background:#ffebee;color:#b71c1c;}
+
+.stats{
+  display:flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  background:#fff;
+  margin:15px;
+  padding:15px 5px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.stat-box{
+  text-align:center;
+  flex:1 1 120px;
+  margin:10px;
+  background:#fff5f5;
+  border-radius:10px;
+  padding:15px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.1);
+}
+.stat-box h2{color:#d32f2f;margin-bottom:5px;}
+.stat-box p{font-size:14px;color:#555;}
+
+.section{padding:20px;text-align:center;}
+.section h2{color:#c4001d;margin-bottom:15px;font-size:20px;}
+.donor-grid{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+.donor-card{
+  background:white;
+  width:130px;
+  border-radius:16px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  padding:10px;
+  text-align:center;
+  transition:transform 0.3s;
+  animation:pop 1.2s ease;
+}
+.donor-card:hover{transform:scale(1.05);}
+.donor-card img{
+  width:80px;height:80px;border-radius:50%;
+  border:3px solid #ff4d4d;
+  object-fit:cover;
+  margin-bottom:8px;
+}
+@keyframes pop{
+  0%{transform:scale(0.6);opacity:0;}
+  100%{transform:scale(1);opacity:1;}
+}
+footer{
+  background:#d32f2f;
+  color:white;
+  text-align:center;
+  padding:10px;
+  margin-top:25px;
+}
+</style>
+</head>
+<body>
+
+<!-- 🩸 Header Section -->
+<header>
+  <div style="display:flex;align-items:center;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966327.png" alt="logo">
+    <h1>LifeSave Blood Bank</h1>
+  </div>
+</header>
+
+<!-- 🧭 Navigation Menu -->
+<nav>
+  <a href="index.html" class="active">হোম</a>
+  <a href="register.html">রেজিস্ট্রেশন</a>
+  <a href="donorlist.html">ডোনার লিস্ট</a>
+  <a href="donate.html">রক্ত দিন</a>
+  <a href="contact.html">যোগাযোগ</a>
+</nav>
+
+<!-- 📊 Summary Stats -->
+<section class="stats">
+  <div class="stat-box">
+    <h2 id="totalDonors">0</h2>
+    <p>মোট রেজিস্টার্ড দাতা</p>
+  </div>
+  <div class="stat-box">
+    <h2 id="totalDonation">0</h2>
+    <p>মোট ডোনেশন</p>
+  </div>
+  <div class="stat-box">
+    <h2 id="todayDonation">0</h2>
+    <p>আজকের দান</p>
+  </div>
+</section>
+
+<!-- নতুন ডোনার -->
+<section class="section">
+  <h2>🩸 নতুন রেজিস্টার্ড দাতা</h2>
+  <div id="newDonors" class="donor-grid"></div>
+</section>
+
+<!-- টপ ডোনার -->
+<section class="section">
+  <h2>🏆 টপ ডোনার</h2>
+  <div id="topDonors" class="donor-grid"></div>
+</section>
+
+<footer>
+  © 2025 LifeSave Blood Bank | সর্বস্বত্ব সংরক্ষিত
+</footer>
+
+<script>
+// ⚙️ ডেমো ডেটা (পরে Google Sheet দিয়ে সংযুক্ত করা যাবে)
+const stats = {
+  totalDonors: 124,
+  totalDonation: 368,
+  todayDonation: 5
+};
+const newDonorsData=[
+  {name:"রাফি",blood:"A+",photo:"https://i.pravatar.cc/100?img=1"},
+  {name:"সোহানা",blood:"B+",photo:"https://i.pravatar.cc/100?img=2"},
+  {name:"মেহেদী",blood:"O+",photo:"https://i.pravatar.cc/100?img=3"},
+  {name:"রিমা",blood:"AB-",photo:"https://i.pravatar.cc/100?img=4"}
+];
+const topDonorsData=[
+  {name:"তানভীর",total:8,photo:"https://i.pravatar.cc/100?img=5"},
+  {name:"মৌ",total:7,photo:"https://i.pravatar.cc/100?img=6"},
+  {name:"রাহুল",total:6,photo:"https://i.pravatar.cc/100?img=7"},
+  {name:"নাজমা",total:5,photo:"https://i.pravatar.cc/100?img=8"}
+];
+
+// Load dynamic data
+function loadData(){
+  document.getElementById("totalDonors").innerText=stats.totalDonors;
+  document.getElementById("totalDonation").innerText=stats.totalDonation;
+  document.getElementById("todayDonation").innerText=stats.todayDonation;
+
+  const newD=document.getElementById("newDonors");
+  const topD=document.getElementById("topDonors");
+
+  newDonorsData.forEach(d=>{
+    newD.innerHTML+=`
+      <div class="donor-card">
+        <img src="${d.photo}" alt="${d.name}">
+        <h4>${d.name}</h4>
+        <p>${d.blood}</p>
+      </div>`;
+  });
+  topDonorsData.forEach(d=>{
+    topD.innerHTML+=`
+      <div class="donor-card">
+        <img src="${d.photo}" alt="${d.name}">
+        <h4>${d.name}</h4>
+        <p>দান: ${d.total}</p>
+      </div>`;
+  });
+}
+loadData();
+</script>
+
+</body>
+</html>
